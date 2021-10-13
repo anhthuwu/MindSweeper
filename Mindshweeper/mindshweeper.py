@@ -227,15 +227,15 @@ def explore():
                     v_maxspill = min(vVal-len(mn),len(cpmn))
                     spill = min(n_minspill,v_minspill) #ADD functionality to consider 2 non neighbor sharing mine neighbor as well; only update unassigned for new board
                     if n_minspill > 0:
-                        if (vVal-len(mn)) == n_minspill:
+                        if (vVal-len(mn)) <= n_minspill: #== is enough 
                             for vn in v_noncommon:
                                 toClick.add(vn)
                     if v_minspill > 0:
-                        if (nVal-len(n_mn)) == v_minspill:
+                        if (nVal-len(n_mn)) <= v_minspill: #== is enough 
                             for nn in n_noncommon:
                                 toClick.add(nn)
                     if spill > 0: #guarantee exact spill <= why can't DELETE??
-                        if v_maxspill-n_minspill >= len(v_noncommon) and v_maxspill > n_maxspill:
+                        if v_maxspill-n_maxspill >= len(v_noncommon) and v_maxspill > n_maxspill: #== is enough for first condition
                             # either make sure to open nums first or check that mine 
                             #won't violate
                             #deleted: vVal-len(mn) > len(v_noncommon) and vVal-len(mn)-spill == len(v_noncommon) and 
@@ -251,7 +251,7 @@ def explore():
                                 print(f"spill = {v_maxspill}-{n_minspill}\nv-n: {v}-{n} \nvn: {vn}")#\nv_noncom-n_noncommon: {v_noncommon}-{n_noncommon}")
                                 grid[vnr][vnc] = 69
                                 # toRightClick.append(vn)
-                        if n_maxspill-v_minspill >= len(n_noncommon) and n_maxspill > v_maxspill:
+                        if n_maxspill-v_maxspill >= len(n_noncommon) and n_maxspill > v_maxspill: #== is enough for first condition
                             for nn in n_noncommon:
                                 (nnr,nnc) = nn
                                 print(f"spill = {v_maxspill}-{n_minspill}\nv-n: {v}-{n} \nnn: {nn}")#\nv_noncom-n_noncommon: {v_noncommon}-{n_noncommon}")
@@ -292,7 +292,7 @@ def print_grid(grid):
 pyautogui.click(sX+boardX,sY+boardY)
 
 while(len(getUnassignedVar()) > 0):
-    pyautogui.moveTo(fullBoardX+100,fullBoardY+30)
+    pyautogui.moveTo(fullBoardX+130,fullBoardY+35)
     board = pyautogui.screenshot('board.png',region=(boardX,boardY, boardW, boardH))
     toClick = set()
     # toRightClick = []
@@ -318,6 +318,6 @@ while(len(getUnassignedVar()) > 0):
     explore()
     clickOnBoard(toClick)
     # rightClickOnBoard(list(set(toRightClick)))
-    time.sleep(.5)
+    time.sleep(.25)
     print_grid(grid)
     print("\n______________________\n")
