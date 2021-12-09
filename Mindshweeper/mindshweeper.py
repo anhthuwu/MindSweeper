@@ -1,8 +1,10 @@
 import time
 import winsound
 import pyautogui
+import random
 from pprint import pprint
-time.sleep(2)
+# time.sleep(2)
+first = True
 # tL = pyautogui.locateCenterOnScreen('topLeft.png', confidence=0.7)
 tR = pyautogui.locateCenterOnScreen('topRight.png', confidence=0.9)
 bL = pyautogui.locateCenterOnScreen('botLeft.png', confidence=0.9)
@@ -23,20 +25,20 @@ boardBlock = (boardX,boardY,boardW,boardH)
 
 fullBoard = pyautogui.screenshot('fullBoard.png',region=(fullBoardX,fullBoardY, fullBoardW, fullBoardH))
 board = pyautogui.screenshot('board.png',region=(boardX,boardY, boardW, boardH))
-winsound.Beep(2000,333)
+# winsound.Beep(2000,333)
 
-dLevel = None
+# dLevel = None
 
-if pyautogui.locate('hard.png', 'fullBoard.png', confidence=0.95):
-    dLevel='h'
-elif pyautogui.locate('medium.png', 'fullBoard.png', confidence=0.95):
-    dLevel='m'
-elif pyautogui.locate('easy.png', 'fullBoard.png', confidence=0.95):
-    dLevel='e'
-else:
-    print("Can't determine difficulty level.")
+# if pyautogui.locate('hard.png', 'fullBoard.png', confidence=0.95):
+#     dLevel='h'
+# elif pyautogui.locate('medium.png', 'fullBoard.png', confidence=0.95):
+#     dLevel='m'
+# elif pyautogui.locate('easy.png', 'fullBoard.png', confidence=0.95):
+#     dLevel='e'
+# else:
+#     print("Can't determine difficulty level.")
 
-print(f"Difficulty Level is: {dLevel}")
+# print(f"Difficulty Level is: {dLevel}")
 
 # ones = list(pyautogui.locateAllOnScreen('one.png', confidence=.8))
 # winsound.Beep(2000,333)
@@ -62,7 +64,7 @@ hardDim = (20,24)
 cellW = boardW/hardDim[1]
 cellH = boardH/hardDim[0]
 grid = [ [-1]*24 for i in range(20)]
-print(f"Cell width: {cellW}; Cell Height: {cellH}")
+# print(f"Cell width: {cellW}; Cell Height: {cellH}")
 def boardToGridCoordinate(x, y): #center coor
     c = round((x-(cellW/2)+cellW-boardX)/cellW-1)
     r = round((y-(cellH/2)+cellH-boardY)/cellH-1)
@@ -197,7 +199,7 @@ def fillMine():
             for n in un:
                 (i,j) = n
                 grid[i][j] = 69
-                # toRightClick.append(n)
+                toRightClick.append(n)
 
 def explore():
     av = getNextAssignedNum()
@@ -248,15 +250,23 @@ def explore():
                                 #     if grid[cr][cc] <= len(getMineNeighbor(cr,cc)):
                                 #         guess = False
                                 # if guess:
-                                print(f"spill = {v_maxspill}-{n_minspill}\nv-n: {v}-{n} \nvn: {vn}")#\nv_noncom-n_noncommon: {v_noncommon}-{n_noncommon}")
+                                # print(f"spill = {v_maxspill}-{n_minspill}\nv-n: {v}-{n} \nvn: {vn}")#\nv_noncom-n_noncommon: {v_noncommon}-{n_noncommon}")
                                 grid[vnr][vnc] = 69
-                                # toRightClick.append(vn)
+                                toRightClick.append(vn)
                         if n_maxspill-v_maxspill >= len(n_noncommon) and n_maxspill > v_maxspill: #== is enough for first condition
                             for nn in n_noncommon:
                                 (nnr,nnc) = nn
-                                print(f"spill = {v_maxspill}-{n_minspill}\nv-n: {v}-{n} \nnn: {nn}")#\nv_noncom-n_noncommon: {v_noncommon}-{n_noncommon}")
+                                # print(f"spill = {v_maxspill}-{n_minspill}\nv-n: {v}-{n} \nnn: {nn}")#\nv_noncom-n_noncommon: {v_noncommon}-{n_noncommon}")
                                 grid[nnr][nnc] = 69
-                                # toRightClick.append(nn)
+                                toRightClick.append(nn)
+
+def crossYourFinger():
+    global first
+    if not first:
+        print("🤞"*10)
+        toClick.add(random.choice(getUnassignedVar()))
+    else:
+        first = False
 
 def closeTo(a,b):
     toret = (b[0]-a[0])**2+(b[1]-a[1])**2+(b[2]-a[2])**2
@@ -295,29 +305,31 @@ while(len(getUnassignedVar()) > 0):
     pyautogui.moveTo(fullBoardX+130,fullBoardY+35)
     board = pyautogui.screenshot('board.png',region=(boardX,boardY, boardW, boardH))
     toClick = set()
-    # toRightClick = []
-    winsound.Beep(5000,333)
+    toRightClick = []
+    # winsound.Beep(5000,333)
     ones = (list(pyautogui.locateAllOnScreen('one.png', confidence=.8, region=boardBlock)), 1)
-    winsound.Beep(2000,333)
+    # winsound.Beep(2000,333)
     twos = (list(pyautogui.locateAllOnScreen('two.png', confidence=.8, region=boardBlock)), 2)
-    winsound.Beep(2000,333)
+    # winsound.Beep(2000,333)
     threes = (list(pyautogui.locateAllOnScreen('three.png', confidence=.8, region=boardBlock)), 3)
-    winsound.Beep(2000,333)
+    # winsound.Beep(2000,333)
     fours = (list(pyautogui.locateAllOnScreen('four.png', confidence=.8, region=boardBlock)), 4)
-    winsound.Beep(2000,333)
+    # winsound.Beep(2000,333)
     fives = (list(pyautogui.locateAllOnScreen('five.png', confidence=.8, region=boardBlock)), 5)
-    winsound.Beep(2000,333)
+    # winsound.Beep(2000,333)
     sixes = (list(pyautogui.locateAllOnScreen('six.png', confidence=.8, region=boardBlock)), 6)
-    winsound.Beep(2000,333)
+    # winsound.Beep(2000,333)
     sevens = (list(pyautogui.locateAllOnScreen('seven.png', confidence=.8, region=boardBlock)), 7)
-    winsound.Beep(2000,333)
+    # winsound.Beep(2000,333)
     num = [ones, twos, threes, fours, fives, sixes, sevens]
     fillSafe()
     fillNum()
     fillMine()
     explore()
+    if len(toClick) == 0:
+        crossYourFinger()
     clickOnBoard(toClick)
-    # rightClickOnBoard(list(set(toRightClick)))
+    rightClickOnBoard(list(set(toRightClick)))
     time.sleep(.25)
     print_grid(grid)
     print("\n______________________\n")
